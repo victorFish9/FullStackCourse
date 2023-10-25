@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+//import './App.css'
 
 const Statistics = (props) => {
   console.log(props)
@@ -27,7 +27,23 @@ const StatisticsLine = (props) => {
   console.log("StatisticsLine", props)
   return (
     <div>
-      <p>{props.text} {props.value}</p>
+      <table>
+        <thead>
+          <tr>
+            <th>
+              {props.text}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              {props.value}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      {/* <p>{props.text} {props.value}</p>*/}
     </div>
   )
 }
