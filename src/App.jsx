@@ -10,15 +10,24 @@ const Statistics = (props) => {
       {
         props.total ? (<div>
           <h3>statistics</h3>
-          <p>good {props.good}</p>
-          <p>neutral {props.neutral}</p>
-          <p>bad {props.bad}</p>
-          <p>all {props.total}</p>
-          <p>average {(props.good - props.bad) / props.total}</p>
-          <p>positive {(props.good / props.total) * 100}%</p>
+          <StatisticsLine text="good" value={props.good} />
+          <StatisticsLine text="neutral" value={props.neutral} />
+          <StatisticsLine text="bad" value={props.bad} />
+          <StatisticsLine text="total" value={props.total} />
+          <StatisticsLine text="average" value={(props.good - props.bad) / props.total} />
+          <StatisticsLine text="positive" value={(props.good / props.total) * 100} />
         </div>) : (<p>No feedback given</p>)
       }
 
+    </div>
+  )
+}
+
+const StatisticsLine = (props) => {
+  console.log("StatisticsLine", props)
+  return (
+    <div>
+      <p>{props.text} {props.value}</p>
     </div>
   )
 }
