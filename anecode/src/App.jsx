@@ -16,19 +16,45 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
+  const [rNumber, setRNumber] = useState(0)
+
+  const points = [0, 0, 0, 0, 0, 0, 0, 0]
+  //const points = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 }
+
+
 
   const randomNum = () => {
-
     const randomNumber = Math.floor(Math.random() * (anecdotes.length - 0)) + 0
-    console.log(randomNumber)
-    setSelected(randomNumber)
+    setRNumber(randomNumber)
+    //console.log("Call from randomNum", randomNumber)
+
+    return randomNumber
   }
+
+  const showAnecdote = () => {
+    const randomNumber = randomNum()
+    setSelected(randomNumber)
+    console.log("Call from showAnecdote", randomNumber)
+  }
+
+  const vote = () => {
+    //const randomNumber = randomNum()
+    const copy = { ...points }
+    copy[randomNum()] += 1
+    console.log("Call from vote", points[randomNum()])
+    console.log(copy)
+  }
+
+
+
 
   return (
     <div>
       {anecdotes[selected]}
+      <p> {points[rNumber]}</p>
       <br /><br />
-      <button onClick={randomNum}>next anecdote</button>
+      <button onClick={showAnecdote}>next anecdote</button>
+      <button onClick={vote}>vote</button>
     </div>
   )
 }
