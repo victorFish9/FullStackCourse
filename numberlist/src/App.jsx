@@ -3,6 +3,7 @@ import './App.css'
 import AddPerson from './components/AddPerson'
 import FilterPerson from './components/FilterPerson'
 import axios from 'axios'
+import personsService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,16 +11,13 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
 
-  const hook = () => {
-    console.log("effect")
-    axios.get('http://localhost:3001/persons')
-      .then(response => {
-        console.log("promise fulfilled", response)
-        setPersons(response.data)
+  useEffect(() => {
+    personsService
+      .listAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
-  }
-
-  useEffect(hook, [])
+  }, [])
 
 
   const handleFilterName = (event) => {
@@ -33,17 +31,46 @@ const App = () => {
       number: newNumber
     }
 
+    console.log("Person object:", personObject)
+
     const isDuplicateName = persons.some(p => p.name === newName)
+    const isDuplicateNumber = persons.some(p => p.number === newNumber)
+
+
+
 
     if (isDuplicateName) {
+      if (isDuplicateNumber) {
+        console.log('Number is duplicate')
+      } else {
+        const isConfirmed = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+        if (isConfirmed) {
+          personsService.update(id, newNumber)
+            .then(returnedNote => {
+              setPersons(persons.map(p => p.id !== id ? p : returnedNote))
+            })
+        }
+      }
       alert(`${newName} is already added to phone book`)
       setNewName('')
       setNewNumber('')
     } else {
-      setPersons(persons.concat(personObject))
+      personsService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+        })
       setNewName('')
       setNewNumber('')
     }
+  }
+
+  const handleDelete = (id) => {
+    personsService.mydelete(id)
+      .then(() => {
+        setPersons(persons.filter((person) => person.id !== id))
+      })
   }
 
   const filteredPersons = persons.filter((person) =>
@@ -58,8 +85,9 @@ const App = () => {
       <h2>Numbers</h2>
       <ul>
         {filteredPersons.map(x =>
-          <li key={x.name}>
+          <li key={x.id}>
             {x.name} {x.number}
+            <button onClick={() => handleDelete(x.id)}>Delete</button>
           </li>)}
       </ul>
       <div>debug: {newName} {newNumber}</div>
