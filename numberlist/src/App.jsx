@@ -24,7 +24,7 @@ const App = () => {
     setFilterName(event.target.value)
   }
 
-  const addPerson = (event) => {
+  const addPerson = (event, id) => {
     event.preventDefault()
     const personObject = {
       name: newName,
