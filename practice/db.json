@@ -24,6 +24,11 @@
       "content": "Post from Victor",
       "important": false,
       "id": 5
+    },
+    {
+      "content": "HEllo?",
+      "important": true,
+      "id": 6
     }
   ]
 }
