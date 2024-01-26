@@ -89,6 +89,17 @@ const App = () => {
       })
   }
 
+  const removeNote = id => {
+    try {
+      noteService.remove(id)
+        .then(() => {
+          setNotes(notes.filter((note) => note.id !== id))
+        })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
 
   const loginForm = () => {
@@ -121,7 +132,7 @@ const App = () => {
     <div>
       <h1>My Notes!</h1>
 
-      <h1>{errorMessage}</h1>
+      <h1 className='error'>{errorMessage}</h1>
 
       {!user && loginForm()}
       {user && <div>
@@ -140,7 +151,7 @@ const App = () => {
       </div>
       <ul>
         {notesToShow.map(note =>
-          <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} />
+          <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} removeNote={removeNote} />
         )}
       </ul>
 
