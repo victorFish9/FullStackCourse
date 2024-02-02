@@ -6,19 +6,8 @@ import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 
 import App from './App'
-import noteReducer, { setNotes } from './redurcers/noteReducer'
-import filterReducer from './redurcers/filterReducer'
 import noteService from './services/notes'
-
-const store = configureStore({
-  reducer: {
-    notes: noteReducer,
-    filter: filterReducer
-  }
-})
-
-noteService.getAll().then(notes =>
-  store.dispatch(setNotes(notes)))
+import store from './store'
 
 //const store = createStore(reducer)
 
