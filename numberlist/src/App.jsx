@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import AddPerson from './components/AddPerson'
 import FilterPerson from './components/FilterPerson'
-import axios from 'axios'
 import personsService from './services/persons'
 
 const App = () => {
@@ -10,6 +9,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [showError, setShowError] = useState(false)
+
 
   useEffect(() => {
     personsService
@@ -20,11 +21,12 @@ const App = () => {
   }, [])
 
 
+
   const handleFilterName = (event) => {
     setFilterName(event.target.value)
   }
 
-  const addPerson = (event, id) => {
+  const addPerson = async (event, id) => {
     event.preventDefault()
     const personObject = {
       name: newName,
@@ -35,9 +37,6 @@ const App = () => {
 
     const isDuplicateName = persons.some(p => p.name === newName)
     const isDuplicateNumber = persons.some(p => p.number === newNumber)
-
-
-
 
     if (isDuplicateName) {
       if (isDuplicateNumber) {
@@ -60,10 +59,14 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
+        }).catch(error => {
+          //console.log(error.response.data)
+          setShowError(true)
         })
       setNewName('')
       setNewNumber('')
     }
+
   }
 
   const handleDelete = (id) => {
@@ -71,6 +74,7 @@ const App = () => {
       .then(() => {
         setPersons(persons.filter((person) => person.id !== id))
       })
+    window.location.reload()
   }
 
   const filteredPersons = persons.filter((person) =>
@@ -90,6 +94,9 @@ const App = () => {
             <button onClick={() => handleDelete(x.id)}>Delete</button>
           </li>)}
       </ul>
+      <div>
+        {showError ? <div>Your name should contain more than 3 letter</div> : null}
+      </div>
       <div>debug: {newName} {newNumber}</div>
     </div>
   )
